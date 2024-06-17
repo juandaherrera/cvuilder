@@ -4,6 +4,19 @@ from cv_web.components.shared import footer, navbar
 from cv_web.styles.colors import Color, TextColor
 from cv_web.styles.styles import GENERAL_PAGE_PADDING_X, Size, Spacing
 
+from .monaco import monaco_editor
+
+
+class IndexState(rx.State):
+    query: str = "Select * from table_name;"
+
+    def set_query(self, value: str):
+        self.query = value
+
+    def execute_query(self):
+        # Implementa la lógica para ejecutar la consulta SQL aquí
+        pass
+
 
 @rx.page(
     route="/",
@@ -50,6 +63,14 @@ def index_hook() -> rx.Component:
             width="100%",
         ),
         rx.vstack(
+            rx.vstack(
+                monaco_editor(
+                    value=IndexState.query, theme=rx.color_mode_cond(light="light", dark="vs-dark")
+                ),
+                rx.button("Execute", on_click=IndexState.execute_query),
+                width="100%",
+                height="500px",
+            ),
             align_items="left",
             width="100%",
         ),
